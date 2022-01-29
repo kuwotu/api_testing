@@ -13,47 +13,42 @@
       const button = document.querySelector("#button");
       const input = document.querySelector("#searchbar");
 
-      fetchOriginal = () => {
-        fetch(
-          "https://api.giphy.com/v1/gifs/translate?api_key=gNo47ofJZQaHcsHBWle3buBhYBw5dcBg&s=coding",
-          { mode: "cors" }
-        )
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (response) {
-            img.src = response.data.images.original.url;
-          })
-          .catch((error) => {
-            console.error("Something is wrong with your search", error);
-            img.src =
-              "https://www.elegantthemes.com/blog/wp-content/uploads/2020/08/000-http-error-codes.png";
-          });
+      fetchCoding = async () => {
+        try {
+          const response = await fetch(
+            "https://api.giphy.com/v1/gifs/translate?api_key=gNo47ofJZQaHcsHBWle3buBhYBw5dcBg&s=coding",
+            { mode: "cors" }
+          );
+
+          const codingData = await response.json();
+          img.src = codingData.data.images.original.url;
+        } catch (error) {
+          console.error("Something is wrong with your search", error);
+          img.src =
+            "https://www.elegantthemes.com/blog/wp-content/uploads/2020/08/000-http-error-codes.png";
+        }
       };
 
-      fetchImages = () => {
-        let searchbar = `https://api.giphy.com/v1/gifs/translate?api_key=gNo47ofJZQaHcsHBWle3buBhYBw5dcBg&s=${input.value}`;
-        fetch(searchbar, { mode: "cors" })
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (response) {
-            img.src = response.data.images.original.url;
-          })
-          .catch((error) => {
-            console.error("Something is wrong with your search", error);
-            img.src =
-              "https://www.elegantthemes.com/blog/wp-content/uploads/2020/08/000-http-error-codes.png";
-          });
+      fetchImages = async () => {
+        try {
+          let searchbar = `https://api.giphy.com/v1/gifs/translate?api_key=gNo47ofJZQaHcsHBWle3buBhYBw5dcBg&s=${input.value}`;
+          const response = await fetch(searchbar, { mode: "cors" });
+          const chosenSearch = await response.json();
+          img.src = chosenSearch.data.images.original.url;
+        } catch (error) {
+          console.error("Something is wrong with your search", error);
+          img.src =
+            "https://www.elegantthemes.com/blog/wp-content/uploads/2020/08/000-http-error-codes.png";
+        }
       };
 
       button.addEventListener("click", () => {
         if (input.value == "" || undefined) {
-          fetchOriginal();
+          fetchCoding();
         } else fetchImages();
       });
 
-      fetchOriginal();
+      fetchCoding();
     </script>
   </body>
 </html>
