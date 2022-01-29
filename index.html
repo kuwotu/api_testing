@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <img src="#" />
+    <button id="button" type="button">Get New Image</button>
+    <input id="searchbar" type="text" placeholder="Search for images" />
+    <script>
+      const img = document.querySelector("img");
+      const button = document.querySelector("#button");
+      const input = document.querySelector("#searchbar");
+
+      fetchOriginal = () => {
+        fetch(
+          "https://api.giphy.com/v1/gifs/translate?api_key=gNo47ofJZQaHcsHBWle3buBhYBw5dcBg&s=coding",
+          { mode: "cors" }
+        )
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (response) {
+            img.src = response.data.images.original.url;
+          })
+          .catch((error) => {
+            console.error("Something is wrong with your search", error);
+            img.src =
+              "https://www.elegantthemes.com/blog/wp-content/uploads/2020/08/000-http-error-codes.png";
+          });
+      };
+
+      fetchImages = () => {
+        let searchbar = `https://api.giphy.com/v1/gifs/translate?api_key=gNo47ofJZQaHcsHBWle3buBhYBw5dcBg&s=${input.value}`;
+        fetch(searchbar, { mode: "cors" })
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (response) {
+            img.src = response.data.images.original.url;
+          })
+          .catch((error) => {
+            console.error("Something is wrong with your search", error);
+            img.src =
+              "https://www.elegantthemes.com/blog/wp-content/uploads/2020/08/000-http-error-codes.png";
+          });
+      };
+
+      button.addEventListener("click", () => {
+        if (input.value == "" || undefined) {
+          fetchOriginal();
+        } else fetchImages();
+      });
+
+      fetchOriginal();
+    </script>
+  </body>
+</html>
